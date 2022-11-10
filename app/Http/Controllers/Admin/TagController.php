@@ -6,6 +6,7 @@ use App\Http\Requests\TagRequest;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 
 class TagController extends Controller
 {
@@ -41,7 +42,6 @@ class TagController extends Controller
         $tag = new Tag();
         $tag->name = $request->name;
 
-
         $tag->save();
         session()->flash('success', "Le Tag a bien été enregistré");
         return redirect()->route('admin.tags.index');
@@ -53,9 +53,29 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Tag $tag)
     {
-        //
+        $posts = $tag
+            ->posts()
+            ->with(['category', 'tags'])
+            ->where('published', true)
+            ->latest()
+            ->get;
+
+        $categories = Category::query()
+            ->orderBy('name', 'asc')
+            ->get();
+
+        $tags = Tag::query()
+            ->orderBy('name', 'asc')
+            ->get();
+
+        return view('tags.show', [
+            'tag' => $tag,
+            'posts' => $posts,
+            'categories' => $categories,
+            'tags' => $tags,
+        ]);
     }
 
     /**
@@ -79,12 +99,8 @@ class TagController extends Controller
     public function update(TagRequest $request, Tag $tag)
     {
         $tag->name = $request->name;
-
-
         $tag->save();
-
         $tag = Tag::latest()->get();
-
 
         session()->flash('success', "Le tag  a bien été modifié");
         return redirect()->route('admin.tags.index', ['tag' => $tag]);

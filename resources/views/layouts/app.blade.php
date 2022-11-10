@@ -17,34 +17,27 @@
                 <span class="fs-4">Blog Créative</span>
             </a>
 ​
-            <ul class="nav nav-pills">
-                
-                <li class="nav-item"><a href="/" class="nav-link active">Accueil</a></li>
-                
-                <li class="nav-item"><a href="{{route('admin.dashboard')}}" class="btn btn-outline-primary">Administration</a></li>
-                @auth
-                
+            <ul class="nav nav-pills">                
+                <li class="nav-item mr-2"><a href="/" class="nav-link active">Accueil</a></li>                
+                <li class="nav-item mr-2"><a href="{{route('admin.dashboard')}}" class="btn btn-outline-primary">Administration</a></li>
+                @auth               
                     <li>
-                        <form method="POST" action="{{ route ('logout') }}>
-                            @csrf
-                            <button class="btn btn-outline-primary"  onclick="event.preventDefault(); this.closeset('form').submit();">Deconnexion</button>
+                        <form method="POST" action="{{ route ('logout') }}">
+                            @csrf                       
+                            {{-- <button  class="btn btn-outline-primary"  onclick="event.preventDefault(); this.closeset('form').submit();">Deconnexion</button> --}}
+                            <button class=" btn btn-outline-primary nav-item" >Deconnexion</button>
                         </form>
                     </li>
-                 @endauth
-            
+                @endauth            
             </ul>
-
-
         </header>
     </div>
 ​    
     <div class="container" id="news" style="margin-bottom:150px">
         <div class="flex justify-end ">
-
-
         </div>
         @include('partials.alert')
-      @yield('content')
+    @yield('content')
     </div>
 ​         
     <div class="container">

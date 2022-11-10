@@ -39,8 +39,6 @@ class PostController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-
-
         return view('admin.posts.create', ['categories' => $categories, 'tags' => $tags]);
     }
 
@@ -59,6 +57,7 @@ class PostController extends Controller
         $post->published = (bool) $request->published;
         $post->category_id = $request->category_id;
 
+
         if (isset($request->image)) {
 
             $imageName = Str::uuid() . '.' . $request->image->extension();
@@ -66,8 +65,9 @@ class PostController extends Controller
             $post->image = $imageName;
         }
 
-
-
+        if (isset($request->tags)) {
+            $post->tags()->attach($request->tags);
+        }
 
         $post->save();
         session()->flash('success', "L'article a bien été enregistré");
@@ -102,8 +102,6 @@ class PostController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-
-
         return view('admin.posts.edit', ['post' => $post, 'categories' => $categories, 'tags' => $tags]);
     }
 
@@ -135,11 +133,12 @@ class PostController extends Controller
             $post->image = $imageName;
         }
 
+        if (isset($request->tags)) {
+            $post->tags()->sync($request->tags);
+        }
 
         $post->save();
-
         $post = Post::latest()->get();
-
 
         session()->flash('success', "L'article a bien été modifié");
         return redirect()->route('admin.posts.index', ['post' => $post]);

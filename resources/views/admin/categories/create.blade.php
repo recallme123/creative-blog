@@ -4,9 +4,9 @@
 <div class="container">
     <div class="d-flex justify-content-between">
         <h1 class="mb-4">Ajout de catégorie: </h1>
-        <div>
-            <a class="btn btn-primary mt-1" href="{{ route('admin.categories.index') }}">Retour</a>
-        </div>
+            <div>
+                <a class="btn btn-primary mt-1" href="{{ route('admin.categories.index') }}">Retour</a>
+            </div>
     </div>
 
     @include('partials.validation')
@@ -15,7 +15,7 @@
         @csrf
         <div class="col">
             <label class="form-label" for="Name">Name</label>
-            <input type="text" class="form-control" name="name" id="Name" placeholder="Name" required>
+                <input type="text" class="form-control" name="name" id="Name" placeholder="Name" required>
         </div>
        
         <div class="col-12">

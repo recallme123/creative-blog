@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
@@ -55,9 +56,30 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
+
     {
-        //
+        $posts = $category
+            ->posts()
+            ->with(['category', 'tags'])
+            ->where('published', true)
+            ->latest()
+            ->get();
+
+        $categories = Category::query()
+            ->orderBy('name', 'asc')
+            ->get();
+
+        $tags = Tag::query()
+            ->orderBy('name', 'asc')
+            ->get();
+
+        return view('categories.show', [
+            'category' => $category,
+            'posts' => $posts,
+            'categories' => $categories,
+            'tags' => $tags,
+        ]);
     }
 
     /**
@@ -81,12 +103,8 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         $category->name = $request->name;
-
-
         $category->save();
-
         $category = Category::latest()->get();
-
 
         session()->flash('success', "La catégorie  a bien été modifié");
         return redirect()->route('admin.categories.index', ['category' => $category]);

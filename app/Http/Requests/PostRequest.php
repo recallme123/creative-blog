@@ -21,7 +21,6 @@ class PostRequest extends FormRequest
             'tag' => 'exists;tags,id',
             'image' => 'image |mimes:png,jpg,jpeg|max:2048',
             'published' => 'in:0,1',
-
         ];
     }
 }

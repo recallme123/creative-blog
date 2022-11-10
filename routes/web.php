@@ -27,6 +27,8 @@ Route::get('/hello-creative', function () {
 Route::get('/', [PageController::class, 'home']);
 Route::get('/blog/{id}-{slug}', [PageController::class, 'show'])->name('posts.show');
 
+Route::get('/categorie/{category}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/tag/{tag}', [TagController::class, 'show'])->name('tags.show');
 
 
 
@@ -54,15 +56,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
     Route::put('/tags/{tag}', [TagController::class, 'update'])->name('tags.update');
     Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
 });
-
-// Route::get('/formulaire', function () {
-
-//     return view('formulaire');
-// });
-
-
-
-
 
 
 Route::get('/dashboard', function () {
